@@ -73,7 +73,7 @@ def covid_around_me():
                                    "evolcao", "dt_obito", "CEP", "Data_atualizacao"])
 
     digiteCep = 20540195
-    buscaCep = search_by_cep(str(digiteCep))
+    buscaCep = search_by_cep("20540195")
     bairroCep = strip_accents(buscaCep['bairro'])
 
     casos_sua_rua = df.loc[df.CEP == digiteCep, :]
