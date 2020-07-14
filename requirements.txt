@@ -7,4 +7,3 @@ requests
 pandas
 numpy
 ipyleaflet
-dotenv
