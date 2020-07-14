@@ -16,8 +16,7 @@ dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
 #usando a api do cep aberto para pesquisar ceps
-#token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
-token = "7e177ec94db54fe0e92d3b6b2c9935c0"
+token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
 headers = {'Authorization': 'Token token=%s' % str(token)}
 
 #funções auxiliares
