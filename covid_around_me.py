@@ -17,7 +17,7 @@ load_dotenv(dotenv_path)
 
 #usando a api do cep aberto para pesquisar ceps
 token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
-headers = {'Authorization': 'Token token=%s' % token}
+headers = {'Authorization': 'Token token=%s' % str(token)}
 
 #funções auxiliares
 def search_by_cep(cep):
@@ -73,7 +73,7 @@ def covid_around_me():
                                    "evolcao", "dt_obito", "CEP", "Data_atualizacao"])
 
     digiteCep = 20540195
-    buscaCep = search_by_cep("20540195")
+    buscaCep = search_by_cep(str(digiteCep))
     bairroCep = strip_accents(buscaCep['bairro'])
 
     casos_sua_rua = df.loc[df.CEP == digiteCep, :]
