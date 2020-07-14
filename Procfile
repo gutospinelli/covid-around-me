@@ -1,1 +1,1 @@
-web: python nao_entre_em_panico.py
+web: python covid_around_me.py
