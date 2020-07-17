@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Covid ao Meu Redor</title>
+    <!-- Leaflet  CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!--  Bootstrap   -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+
+</head>
+<body>
+<form action="/" method="post">
+    <div class="container">
+        <div class="jumbotron">
+          <h1 class="display-4">Covid ao meu redor</h1>
+          <p class="lead">Olá, esse é um projeto que acessa dados de plataformas abertas como
+              www.data.rio e www.brasil.io para mostrar quantos casos de Covid foram encontrados ao redor de você, a partir
+          de dados anônimos e indivudializados divulgados pelas secretarias municipais de saúde.</p>
+          <hr class="my-4">
+          <p>Atualmente nossa base de dados está configurada somente para a cidade do Rio de Janeiro. Caso você possua acesso
+              a dados individualizados de outros municípios, sinta-se a vontade para contribuir com esse projeto ou para
+              fazer um fork dele a partir do github.</p>
+          <a class="btn btn-primary btn-lg" href="#" role="button">Acessar GitHub do Projeto</a>
+        </div>
+
+        <h2>Quer saber como a covid está ao seu redor?</h2>
+
+        <div class="form-group">
+            <label for="cep">Digite o seu CEP:</label>
+            <input type="text" class="form-control" id="cep" name="cep" value={{ cep }}>
+            <br>
+            <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+        </div>
+
+
+
+
+    </div>
+
+</form>
+</body>
+</html>

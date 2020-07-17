@@ -5,7 +5,7 @@ import json
 import numpy
 import pandas
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for, redirect
 from ipyleaflet import Map, Marker
 from pandas import json_normalize
 from dotenv import load_dotenv, find_dotenv
@@ -16,7 +16,8 @@ dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
 #usando a api do cep aberto para pesquisar ceps
-token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
+#token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
+token = "7e177ec94db54fe0e92d3b6b2c9935c0"
 headers = {'Authorization': 'Token token=%s' % str(token)}
 
 #funções auxiliares
@@ -45,8 +46,18 @@ def strip_accents(text):
 #Flask App, Code and Routes
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=["GET","POST"])
 def covid_around_me():
+    if request.method == "POST":
+        cep = request.form["cep"]
+        return redirect(url_for("form", cep=cep))
+
+    return render_template("main.html")
+
+@app.route('/form', methods=['GET', 'POST'])
+def form():
+    cep = request.args.get('cep', type=int)
+
     url = 'https://opendata.arcgis.com/datasets/b54234c151aa4d01b488dc12aafd5574_0/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json'
     result = requests.get(url)
     j = result.json()
@@ -70,10 +81,11 @@ def covid_around_me():
 
     df = pandas.DataFrame(numpy.array(listoflists),
                           columns=["dt_notific", "dt_inicio_sintomas", "bairro_resid__estadia", "ap_residencia_estadia",
-                                   "evolcao", "dt_obito", "CEP", "Data_atualizacao"])
+                                   "evolcao", "dt_obito", "CEP", "Data_atualizacao","manter"])
 
-    digiteCep = 20540195
+    digiteCep = cep
     buscaCep = search_by_cep(str(digiteCep))
+    print(buscaCep)
     bairroCep = strip_accents(buscaCep['bairro'])
 
     casos_sua_rua = df.loc[df.CEP == digiteCep, :]
@@ -84,13 +96,15 @@ def covid_around_me():
     print('Casos no seu Bairro: {0}'.format(len(casos_seu_bairro)))
     lbl_bairro = 'Casos no seu Bairro: {0}'.format(len(casos_seu_bairro))
 
-    return jsonify(rua = lbl_rua, bairro = lbl_bairro)
+    # dadosData = df.Data_atualizacao.max()
 
-    #if request.headers.get('Authorization') == '42':
-    #    return jsonify({"42": "a resposta para a vida, o universo e tudo mais"})
-    #return jsonify({"message": "Não entre em pânico!"})
+    latitude = buscaCep['latitude']
+    longitude = buscaCep['longitude']
 
-#Main
+    # return jsonify(rua=lbl_rua, bairro=lbl_bairro, latitude=latitude, longitude=longitude)
+    return render_template("form.html", cep = cep, rua=lbl_rua, bairro=lbl_bairro, latitude =latitude ,longitude = longitude)
+
+#Mai
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
