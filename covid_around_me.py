@@ -85,7 +85,7 @@ def form():
 
     columns = ["dt_notific", "dt_inicio_sintomas", "bairro_resid", "ap_resid","evolucao", "dt_obito", "CEP", "dt_atualizacao","manter"]
 
-    df = pandas.read_csv(filename, skiprows=[0,1], skipfooter=1, delimiter=';',names = columns)
+    df = pandas.read_csv(filename, skiprows=[0,1], skipfooter=1, delimiter=';',names = columns, error_bad_lines=False)
 
     digiteCep = cep
     buscaCep = search_by_cep(str(digiteCep))
