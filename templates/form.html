@@ -23,6 +23,9 @@
     <div class="container">
        <h2>Mapa de Casos <span class="badge badge-secondary">CEP {{ cep }}</span></h2>
         <br>
+        <div class="alert alert-info" role="alert">
+            Você mora na rua {{logradouro}}
+        </div>
         <span class="badge badge-danger">{{rua}}</span>
         <br>
         <span class="badge badge-warning">{{bairro}}</span>
@@ -35,7 +38,7 @@
 
           </div>
           <div class="card-footer text-muted" >
-            Dados Atualizados
+            Dados Atualizados até {{ atualizacao }}
           </div>
         </div>
 
@@ -50,7 +53,7 @@
 
 
     <script type=text/javascript>
-        var map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 13);
+        var map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

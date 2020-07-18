@@ -9,6 +9,8 @@ from flask import Flask, jsonify, request, render_template, url_for, redirect
 from ipyleaflet import Map, Marker
 from pandas import json_normalize
 from dotenv import load_dotenv, find_dotenv
+import csv
+from datetime import date
 
 #acha o arquivo .ENV com a senha do kaggle na estrutura do projeto
 dotenv_path = find_dotenv()
@@ -16,7 +18,8 @@ dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 
 #usando a api do cep aberto para pesquisar ceps
-token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
+#token = os.environ.get("CEP_ABERTO_TOKEN") #pegue seu token pessoal após cadastro no CEP Aberto
+token = "7e177ec94db54fe0e92d3b6b2c9935c0"
 headers = {'Authorization': 'Token token=%s' % str(token)}
 
 #funções auxiliares
@@ -57,30 +60,32 @@ def covid_around_me():
 def form():
     cep = request.args.get('cep', type=int)
 
+    url_csv = "https://opendata.arcgis.com/datasets/b54234c151aa4d01b488dc12aafd5574_0.csv?outSR=4326"
     url = 'https://opendata.arcgis.com/datasets/b54234c151aa4d01b488dc12aafd5574_0/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json'
-    result = requests.get(url)
-    j = result.json()
-    j2 = j['features']
 
-    j2Str = json.dumps(j2)
-    val = j2Str.replace(r"u\ufffd", "?").replace(r"\ufffd", "?")
-    j = json.loads(val)
+    path = os.getcwd()
+    filename = "dados_" + str(date.today()) + ".csv"
 
-    i = 0
-    listoflists = []
-    a_list = []
-    for line in j:
-        for v in line.values():
-            for key, value in v.items():
-                # print(key, value)
-                if i % 2 == 0:
-                    a_list = value.split(';')
-                    listoflists.append(a_list[:])
-                i += 1
+    if not os.path.isfile(filename):
+        #delete all previous csv
+        for item in path:
+            if item.endswith(".csv"):
+                os.remove(os.path.join(path, item))
+        #save the new one
+        with open(filename, 'wb') as f, \
+                requests.get(url_csv, stream=True) as r:
+            for line in r.iter_lines():
+                f.write(line)
+        #replace colon for new line in file
+        with open(filename, 'r') as file:
+            filedata = file.read()
+            filedata = filedata.replace(',', '\n')
+        with open(filename, 'w') as file:
+            file.write(filedata)
 
-    df = pandas.DataFrame(numpy.array(listoflists),
-                          columns=["dt_notific", "dt_inicio_sintomas", "bairro_resid__estadia", "ap_residencia_estadia",
-                                   "evolcao", "dt_obito", "CEP", "Data_atualizacao","manter"])
+    columns = ["dt_notific", "dt_inicio_sintomas", "bairro_resid", "ap_resid","evolucao", "dt_obito", "CEP", "dt_atualizacao","manter"]
+
+    df = pandas.read_csv(filename, skiprows=[0,1], skipfooter=1, delimiter=';',names = columns)
 
     digiteCep = cep
     buscaCep = search_by_cep(str(digiteCep))
@@ -91,17 +96,18 @@ def form():
     print('Casos na sua Rua: {0}'.format(len(casos_sua_rua)))
     lbl_rua = 'Casos na sua Rua: {0}'.format(len(casos_sua_rua))
 
-    casos_seu_bairro = df.loc[df.bairro_resid__estadia == bairroCep.upper(), :]
+    casos_seu_bairro = df.loc[df.bairro_resid == bairroCep.upper(), :]
     print('Casos no seu Bairro: {0}'.format(len(casos_seu_bairro)))
     lbl_bairro = 'Casos no seu Bairro: {0}'.format(len(casos_seu_bairro))
 
-    # dadosData = df.Data_atualizacao.max()
+    dadosData = str(date.today())
 
     latitude = buscaCep['latitude']
     longitude = buscaCep['longitude']
+    nome_rua = buscaCep['logradouro']
 
     # return jsonify(rua=lbl_rua, bairro=lbl_bairro, latitude=latitude, longitude=longitude)
-    return render_template("form.html", cep = cep, rua=lbl_rua, bairro=lbl_bairro, latitude =latitude ,longitude = longitude)
+    return render_template("form.html", cep = cep, rua=lbl_rua, bairro=lbl_bairro, latitude =latitude ,longitude = longitude, atualizacao = dadosData, logradouro = nome_rua)
 
 #Mai
 if __name__ == "__main__":
