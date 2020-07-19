@@ -1,7 +1,7 @@
 # Covid-Around-Me - Rio de Janeiro
 
 
-####En-Us
+#### En-Us
 Covid Around Me is a project that accesses data from open platforms like
 www.data.rio and www.brasil.io to show how many cases of Covid have been found around you, from
 anonymous and individualized data released by the municipal health office.
@@ -9,7 +9,7 @@ anonymous and individualized data released by the municipal health office.
 For now, we only offer data from the city of Rio de Janeiro. Feel free to contribute to this project.
 
 ---
-####Pt-Br
+#### Pt-Br
 O projeto covid ao meu redor é um projeto que acessa dados de plataformas abertas como
 www.data.rio e www.brasil.io para mostrar quantos casos de Covid foram encontrados ao redor de você, a partir
 de dados anônimos e indivudializados divulgados pelas secretarias municipais de saúde.
